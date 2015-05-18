@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.util.Random;
 
 /**
  * Created by anbu0414 on 5/5/2015.
@@ -38,17 +39,135 @@ public class Test {
         //ColorBase cb = new ColorBase();
         //System.out.println(cb.getColorName("8B0000"));
         int[][] im_arr_color = convertTo2DUsingGetRGB(image);
+        //getDistancesBetweenPixels(im_arr_color, image.getWidth(), image.getHeight());
         //int[][] im_arr_grey = new int[im_arr_color.length][im_arr_color.length];
 
-        BufferedImage image_grey = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+        /*BufferedImage image_grey = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
         for (int i=0; i<image_grey.getWidth(); ++i) {
             for (int j=0; j<image_grey.getHeight(); ++j) {
                 image_grey.setRGB(i,j, convertToGrey(im_arr_color[i][j]));
             }
         }
         File saveFile = new File("savedimage_grey2.jpg");
-        ImageIO.write(image_grey, "jpg", saveFile);
+        ImageIO.write(image_grey, "jpg", saveFile);  */
 
+        int height = image.getHeight();
+        int width = image.getWidth();
+
+        int thisColor, up, down, left, right;
+        /*for (int i=1; i<=height-2; ++i) {
+            for (int j=1; j<=width-2; ++j) {
+                thisColor = im_arr_color[j][i];
+                Color c = new Color(thisColor);
+                up = im_arr_color[j][i-1];
+                down = im_arr_color[j][i+1];
+                left = im_arr_color[j-1][i];
+                right = im_arr_color[j+1][i];
+                Color upC = new Color(up);
+                Color downC = new Color(down);
+                Color leftC = new Color(left);
+                Color rightC = new Color(right);
+                //System.out.println("["+j+"]["+i+"]: "+(thisColor-up)+", "+(thisColor-down)+", "+(thisColor-left)+", "+(thisColor-right));
+                System.out.println("["+j+"]["+i+"]: "+c.getRed()+"-"+c.getGreen()+"-"+c.getBlue()+", "
+                        +upC.getRed()+"-"+upC.getGreen()+"-"+upC.getBlue()+", "
+                        +downC.getRed()+"-"+downC.getGreen()+"-"+downC.getBlue()+", "
+                        +leftC.getRed()+"-"+leftC.getGreen()+"-"+leftC.getBlue()+", "
+                        +rightC.getRed()+"-"+rightC.getGreen()+"-"+rightC.getBlue()+", ");
+                System.out.println("["+j+"]["+i+"]: "+Math.abs(c.getRed()-upC.getRed())+"-"+Math.abs(c.getGreen()-upC.getGreen())+"-"+Math.abs(c.getBlue()-upC.getBlue())+", "
+                        +Math.abs(c.getRed()-downC.getRed())+"-"+Math.abs(c.getGreen()-downC.getGreen())+"-"+Math.abs(c.getBlue()-downC.getBlue())+", "
+                        +Math.abs(c.getRed()-leftC.getRed())+"-"+Math.abs(c.getGreen()-leftC.getGreen())+"-"+Math.abs(c.getBlue()-leftC.getBlue()) +", "
+                        +Math.abs(c.getRed()-rightC.getRed())+"-"+Math.abs(c.getGreen()-rightC.getGreen())+"-"+Math.abs(c.getBlue()-rightC.getBlue())+", "
+                                +(Math.abs(c.getRed()-upC.getRed())+Math.abs(c.getGreen()-upC.getGreen())+Math.abs(c.getBlue()-upC.getBlue()))/3 + ", "
+                                +(Math.abs(c.getRed()-downC.getRed())+Math.abs(c.getGreen()-downC.getGreen())+Math.abs(c.getBlue()-downC.getBlue()))/3 + ", "
+                                +(Math.abs(c.getRed()-leftC.getRed())+Math.abs(c.getGreen()-leftC.getGreen())+Math.abs(c.getBlue()-leftC.getBlue()))/3 + ", "
+                                +(Math.abs(c.getRed()-rightC.getRed())+Math.abs(c.getGreen()-rightC.getGreen())+Math.abs(c.getBlue()-rightC.getBlue()))/3 + ", "
+                );
+            }
+        }   */
+
+        /*BufferedImage small_part = new BufferedImage(3, 3, BufferedImage.TYPE_INT_RGB);
+        for (int i=0; i<3; ++i) {
+            for (int j=0; j<3; ++j) {
+                small_part.setRGB(i,j, im_arr_color[i+75][j+78]);
+            }
+        }
+        File saveFile = new File("small_part.jpg");
+        ImageIO.write(small_part, "jpg", saveFile);     */
+
+        BufferedImage salt_and_pepper = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        for (int i=0; i<width; ++i) {
+            for (int j=0; j<height; ++j) {
+                salt_and_pepper.setRGB(i,j, im_arr_color[i][j]);
+            }
+        }
+        Random r = new Random();
+        int color = 16777215;
+        //salt
+        for (int i=0; i<1000; ++i) {
+            int on_width = r.nextInt(2555);
+            int on_height = r.nextInt(1595);
+            //for (int j=0; j<20; ++j) {
+                //for (int k=0; k<20; ++k) {
+                    //salt_and_pepper.setRGB(on_width+k, on_height + j, 16777215);
+                salt_and_pepper.setRGB(on_width, on_height , color);
+                salt_and_pepper.setRGB(on_width + 1, on_height , color);
+                salt_and_pepper.setRGB(on_width + 2, on_height , color);
+                salt_and_pepper.setRGB(on_width, on_height + 1, color);
+                salt_and_pepper.setRGB(on_width + 1, on_height + 1, color);
+                salt_and_pepper.setRGB(on_width + 2, on_height + 1, color);
+                salt_and_pepper.setRGB(on_width, on_height + 2, color);
+                salt_and_pepper.setRGB(on_width + 1, on_height + 2, color);
+                salt_and_pepper.setRGB(on_width + 2, on_height + 2, color);
+                salt_and_pepper.setRGB(on_width, on_height + 3, color);
+                salt_and_pepper.setRGB(on_width + 1, on_height + 3, color);
+                salt_and_pepper.setRGB(on_width + 2, on_height + 3, color);
+                }
+            //}
+       // }
+        //pepper
+        for (int i=0; i<1000; ++i) {
+            color = 0;
+            int on_width = r.nextInt(2555);
+            int on_height = r.nextInt(1595);
+            //for (int j=0; j<20; ++j) {
+            //for (int k=0; k<20; ++k) {
+            //salt_and_pepper.setRGB(on_width+k, on_height + j, 16777215);
+            salt_and_pepper.setRGB(on_width, on_height , color);
+            salt_and_pepper.setRGB(on_width + 1, on_height , color);
+            salt_and_pepper.setRGB(on_width + 2, on_height , color);
+            salt_and_pepper.setRGB(on_width, on_height + 1, color);
+            salt_and_pepper.setRGB(on_width + 1, on_height + 1, color);
+            salt_and_pepper.setRGB(on_width + 2, on_height + 1, color);
+            salt_and_pepper.setRGB(on_width, on_height + 2, color);
+            salt_and_pepper.setRGB(on_width + 1, on_height + 2, color);
+            salt_and_pepper.setRGB(on_width + 2, on_height + 2, color);
+            salt_and_pepper.setRGB(on_width, on_height + 3, color);
+            salt_and_pepper.setRGB(on_width + 1, on_height + 3, color);
+            salt_and_pepper.setRGB(on_width + 2, on_height + 3, color);
+        }
+        File saveFile = new File("salt_and_pepper.jpg");
+        ImageIO.write(salt_and_pepper, "jpg", saveFile);
+
+    }
+
+    public static double[] getDistancesBetweenPixels(int[][] input, int width, int height) {
+        System.out.println("[0][0] = " + input[0][0]);
+        System.out.println("[159][99] = " + input[159][99]);
+        int thisColor, up, down, left, right;
+        for (int i=1; i<=height-2; ++i) {
+            for (int j=1; j<=width-2; ++j) {
+                thisColor = input[j][i];
+                Color c = new Color(thisColor);
+                up = input[j][i-1];
+                down = input[j][i+1];
+                left = input[j-1][i];
+                right = input[j+1][i];
+                //System.out.println("["+j+"]["+i+"]: "+(thisColor-up)+", "+(thisColor-down)+", "+(thisColor-left)+", "+(thisColor-right));
+                System.out.println("["+j+"]["+i+"]: "+c.getRed()+"-"+c.getGreen()+"-"+c.getBlue()+", "+up+", "+down+", "+left+", "+right);
+            }
+        }
+
+        return null;
     }
 
     public static void hexa(int num) {
